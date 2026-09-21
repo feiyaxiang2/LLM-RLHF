@@ -47,6 +47,79 @@ These results are preliminary and will be expanded with larger models and additi
 
 ---
 
+## GRPO Project Quick Start
+
+This project only requires the GRPO pipeline.
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/fzhu0628/LLM-RLHF.git
+cd LLM-RLHF
+```
+
+### 2. Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+If any package is missing, install it manually with `pip`.
+
+### 3. Train the Reward Model (only once)
+
+Run:
+
+```bash
+python reward_model.py
+```
+
+This trains a GPT-2 reward model and saves:
+
+```text
+reward_model.pt
+```
+
+GRPO loads this file automatically.
+
+### 4. Run GRPO
+
+Simply execute:
+
+```bash
+python main_grpo.py
+```
+
+The script will automatically:
+
+- Load the tokenizer and GPT-2
+- Load `reward_model.pt`
+- Perform supervised fine-tuning (SFT)
+- Copy the SFT model to create the frozen reference model
+- Run GRPO training
+- Evaluate the final model
+
+No other scripts need to be run manually.
+
+### 5. Files You Will Likely Modify
+
+- `main_grpo.py` — main training pipeline
+- `ppo.py` — core GRPO algorithm; modify this file to change the optimization algorithm
+- `data_ppo.py` — data loading for GRPO
+- `reward_model.py` — reward model training; normally does not need modification unless changing the reward model
+- `config.py` — hyperparameters such as learning rate, batch size, epochs, and group size
+
+### 6. Recommended Workflow
+
+1. Verify that the original code runs successfully.
+2. Create a copy of `main_grpo.py`, such as `main_my_method.py`.
+3. Implement your idea without modifying the original implementation.
+4. Compare the results against the baseline.
+
+If you encounter a runtime error, copy the complete error message before making changes.
+
+---
+
 ## Current Experiments
 
 - Raw DPO vs length-normalized DPO
